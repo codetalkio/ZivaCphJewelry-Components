@@ -1,0 +1,122 @@
+{{ 'initial-coin.scss' | asset_url | stylesheet_tag }}
+{{ 'initial-coin.js' | asset_url | script_tag }}
+
+<table id="necklace-box-chooser">
+  <tbody>
+    <tr>
+      <td><div class="active" id="necklace-box-chooser-top" data-box-number="1"> </div></td>
+      <td><div id="necklace-box-chooser-left" data-box-number="2"> </div></td>
+      <td><div id="necklace-box-chooser-right" data-box-number="3"> </div></td>
+      <td><div id="necklace-box-chooser-bottom" data-box-number="4"> </div></td>
+    </tr>
+    <tr>
+      <td><img width="14px" height="14px" src="{{ 'chooser-box-top.png' | file_url }}" title="Top box" alt="Top box" /></td>
+      <td><img width="14px" height="14px" src="{{ 'chooser-box-left.png' | file_url }}" title="Left box" alt="Left box" /></td>
+      <td><img width="14px" height="14px" src="{{ 'chooser-box-right.png' | file_url }}" title="Right box" alt="Right box" /></td>
+      <td><img width="14px" height="14px" src="{{ 'chooser-box-bottom.png' | file_url }}" title="Bottom box" alt="Bottom box" /></td>
+    </tr>
+  </tbody>
+</table>
+<br />
+
+<table id="last-component-table" class="necklace-choices necklace-others">
+  <tbody>
+    <tr>
+      <td><span class="choosen-top choosen-left choosen-right choosen-bottom">Empty Room</span></td>
+    </tr>
+  </tbody>
+</table>
+
+<br />
+<p class="necklace-choice-title">Characters</p>
+<table class="necklace-choices necklace-characters">
+  <tbody>
+    <tr>
+      <td><span>A</span></td>
+      <td><span>B</span></td>
+      <td><span>C</span></td>
+      <td><span>D</span></td>
+      <td><span>E</span></td>
+      <td><span>F</span></td>
+      <td><span>G</span></td>
+      <td><span>H</span></td>
+    </tr>
+    <tr>
+      <td><span>I</span></td>
+      <td><span>J</span></td>
+      <td><span>K</span></td>
+      <td><span>L</span></td>
+      <td><span>M</span></td>
+      <td><span>N</span></td>
+      <td><span>O</span></td>
+      <td><span>P</span></td>
+    </tr>
+    <tr>
+      <td><span>Q</span></td>
+      <td><span>R</span></td>
+      <td><span>S</span></td>
+      <td><span>T</span></td>
+      <td><span>U</span></td>
+      <td><span>V</span></td>
+      <td><span>W</span></td>
+      <td><span>X</span></td>
+    </tr>
+    <tr>
+      <td><span>Y</span></td>
+      <td><span>Z</span></td>
+    </tr>
+  </tbody>
+</table>
+
+<br />
+<p class="necklace-choice-title">Numbers</p>
+<table class="necklace-choices necklace-numbers">
+  <tbody>
+    <tr>
+      <td><span>1</span></td>
+      <td><span>2</span></td>
+      <td><span>3</span></td>
+      <td><span>4</span></td>
+      <td><span>5</span></td>
+      <td><span>6</span></td>
+      <td><span>7</span></td>
+      <td><span>8</span></td>
+    </tr>
+    <tr>
+      <td><span>9</span></td>
+      <td><span>0</span></td>
+    </tr>
+  </tbody>
+</table>
+
+<br />
+<p class="necklace-choice-title">Zirkonia</p>
+<table class="necklace-choices necklace-gems">
+  <tbody>
+    <tr>
+      <td>
+        <span data-gem="white">
+          <img width="74px" src="{{ 'gems-white.png' | file_url }}" alt="White Gem" title="White Gem" />
+        </span>
+      </td>
+      <td>
+        <span data-gem="black">
+          <img width="74px" src="{{ 'gems-black.png' | file_url }}" alt="Black Gem" title="Black Gem" />
+        </span>
+      </td>
+      <td>
+        <span data-gem="blue">
+          <img width="74px" src="{{ 'gems-blue.png' | file_url }}" alt="Blue Gem" title="Blue Gem" />
+        </span>
+      </td>
+      <td>
+        <span data-gem="green">
+          <img width="74px" src="{{ 'gems-green.png' | file_url }}" alt="Green Gem" title="Green Gem" />
+        </span>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+
+

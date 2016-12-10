@@ -1,0 +1,184 @@
+jQuery(function($) {
+  var shopifyCDN = '{{ '' | file_url }}'.split('?')[0], // https://cdn.shopify.com/s/files/1/1079/0594/files/
+      $productPrice = $("#ProductPrice"),
+      originalPrice = $productPrice.text().trim(),
+      pricePerGem = 100,
+      currentBox = 1,
+      boxes = {
+        1: 'top',
+        2: 'left',
+        3: 'right',
+        4: 'bottom'
+      },
+      isGem = {
+        1: 0,
+        2: 0,
+        3: 0,
+        4: 0
+      },
+      material = 'gold',
+      component = {
+        1: 'Empty Room',
+        2: 'Empty Room',
+        3: 'Empty Room',
+        4: 'Empty Room'
+      };
+
+  // Update the material of the necklace and components
+  var setMaterial = function() {
+    if (material == 'gold') {
+      $("input#ProductSelect-option-Gold-Plated").trigger("click");
+    }
+    else {
+      $("input#ProductSelect-option-Sterling-Silver").trigger("click");
+    }
+    $('#necklace-preview-image').attr('src',
+      shopifyCDN + material + '-necklace.png'
+    );
+    for(var i=0; i <= 4; i++) {
+      var $img = $('#necklace-box-' + boxes[i] + ' img');
+      if ($img.length > 0) {
+        var src = $($img[0]).attr('src');
+        if (material == 'gold') {
+          $($img[0]).attr('src', src.replace('silver', 'gold'));
+        } else {
+          $($img[0]).attr('src', src.replace('gold', 'silver'));
+        }
+      }
+    }
+  };
+
+  // Set the text of the box chooser and the preview to the clicked item
+  var setNecklaceComponent = function(elem, t) {
+    if (t === 'Empty Room') {
+      $('#necklace-box-chooser-' + boxes[currentBox]).text(' ');
+      $('#necklace-box-' + boxes[currentBox]).text(' ');
+      component[currentBox] = 'Empty Room';
+    } else {
+      if($(elem).is('[data-gem]')) {
+        var gem = $(elem).attr('data-gem');
+        $('#necklace-box-chooser-' + boxes[currentBox]).html(
+          '<img class="gem-in-chooser" src="' + shopifyCDN + 'gems-' + gem + '.png" alt="' + gem + ' gem" title="' + gem
+          + ' gem" />'
+        );
+        $('#necklace-box-' + boxes[currentBox]).html(
+          '<img class="gem-in-box" src="' + shopifyCDN + 'gems-' + gem + '.png" alt="' + gem + ' gem" title="' + gem
+          + ' gem" />'
+        );
+        component[currentBox] = gem + ' zirkonia';
+      } else {
+        $('#necklace-box-chooser-' + boxes[currentBox]).text(t);
+        $('#necklace-box-' + boxes[currentBox]).html(
+          '<img class="component-in-box" src="' + shopifyCDN + material + '-'
+          + t + '.png" alt="' + t + '" title="' + t + '" />'
+        );
+        component[currentBox] = t;
+      }
+    }
+  };
+
+  var updateGemSelector = function() {
+    var numberOfGems = isGem[1] + isGem[2] + isGem[3] + isGem[4];
+    $("input#ProductSelect-option-" + numberOfGems).trigger("click");
+  }
+  
+  var updateCustomizationArea = function() {
+    var txt = 'Top: ' + component[1];
+    txt += ' - Left: ' + component[2];
+    txt += ' - Right: ' + component[3];
+    txt += ' - Bottom: ' + component[4];
+    $("#customization").text(txt);
+  }
+
+  $('.necklace-choices').on('click', 'span', function() {
+    // Remove all classes from that box and add it to the clicked item
+    $('.necklace-choices span').removeClass('choosen-' + boxes[currentBox]);
+    $(this).addClass('choosen-' + boxes[currentBox]);
+
+    // Check if the item was a gem
+    if ($(this).is('[data-gem]')) {
+      isGem[currentBox] = 1;
+    } else {
+      isGem[currentBox] = 0;
+    }
+    setNecklaceComponent(this, $(this).text());
+    updateGemSelector();
+    updateCustomizationArea();
+  });
+
+  $('#necklace-box-chooser').on('click', 'div', function() {
+    // Set the current active box
+    currentBox = parseInt($(this).data('box-number'), 10);
+    // Remove all clases from the box choosers and add it to the clicked one
+    $('#necklace-box-chooser div').removeClass('active');
+    $(this).addClass('active');
+  });
+
+  $('#necklace-material-chooser').on('click', 'div', function() {
+    material = $(this).attr('data-material');
+    $('#necklace-material-chooser div').removeClass('active');
+    $(this).addClass('active');
+    setMaterial();
+    updateCustomizationArea();
+  });
+
+  // Keep necklace preview on the right side when scrolling past it
+  var heightOfPreview = $('#necklace-preview').height(),
+      positionOfPreview = $('#necklace-preview').position(),
+      heightOfLastTable = $('#last-component-table').height(),
+      positionOfLastTable = $('#last-component-table').position(),
+      isSetToFixed = false,
+      isSetToAbsolute = false,
+      attachToBottom = (positionOfLastTable.top
+                + heightOfLastTable) - heightOfPreview + 64;
+  var keepNecklaceInView = function() {
+      if (window.innerWidth < 670) {
+        $('#necklace-preview').removeClass('absolute-necklace-preview');
+        $('#necklace-preview').removeClass('fix-necklace-preview');
+        $('#necklace-preview').css({'top': ''});
+        isSetToFixed = false;
+        isSetToAbsolute = false;
+        return;
+      }
+      var isPastTop = $(window).scrollTop() > positionOfPreview.top,
+          isAboveBottom = (positionOfLastTable.top + heightOfLastTable)
+              > ($(window).scrollTop() + heightOfPreview - 5);
+      if (isPastTop && isAboveBottom) {
+        if (!isSetToFixed) {
+          $('#necklace-preview').addClass('fix-necklace-preview');
+          $('#necklace-preview').removeClass('absolute-necklace-preview');
+          $('#necklace-preview').css({'top': ''});
+          isSetToFixed = true;
+          isSetToAbsolute = false;
+        }
+      } else if (!isAboveBottom) {
+        if (!isSetToAbsolute) {
+          $('#necklace-preview').removeClass('fix-necklace-preview');
+          $('#necklace-preview').addClass('absolute-necklace-preview');
+          $('#necklace-preview').css({'top': attachToBottom});
+          isSetToFixed = false;
+          isSetToAbsolute = true;
+        }
+
+      } else {
+        if (isSetToFixed) {
+          $('#necklace-preview').removeClass('fix-necklace-preview');
+          $('#necklace-preview').removeClass('absolute-necklace-preview');
+          $('#necklace-preview').css({'top': ''});
+          isSetToFixed = false;
+          isSetToAbsolute = false;
+        }
+      }
+  };
+  $(window).scroll(function() {
+    // keepNecklaceInView();
+  });
+
+  // Reset state a bit delayed, else it doesn't catch it
+  setTimeout(function() {
+    updateGemSelector();
+    setMaterial();
+  }, 500);
+});
+
+
